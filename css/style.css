@@ -112,6 +112,9 @@ strong {
   font-size: 0.8125em;
   font-style: italic;
 }
+#header .sear {
+  float: right;
+}
 article {
   padding: 15px 30px;
   position: relative;
