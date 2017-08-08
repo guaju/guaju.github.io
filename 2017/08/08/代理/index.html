@@ -496,7 +496,8 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>最近有准备面试的小伙伴问我JAVA中的代理是什么?<br>被这么突然被这么一问，感觉有点懵逼啊，于是赶紧对这点知识做个复习，在这做下记录。    </p>
+        <p>最近有准备面试的小伙伴问我JAVA中的代理是什么?</p>
+<p>被这么突然被这么一问，感觉有点懵逼啊，于是赶紧对这点知识做个复习，在这做下记录。    </p>
 <p>“代理”这个名词我们都很熟悉，最常见的就是“火车票代售点”、“xxx化妆品代理”等等，那么代理的意思就是：我们可以不用真正的“<strong>主体</strong>”，就能够使用到“<strong>主体</strong>”里面的功能，访问到“<strong>主体</strong>”里面的某个属性。</p>
 <p>那么总结一句话：“<em>代理是为一个对象提供一个代理者，别人通过这个代理者能够完成对这个对象的访问。</em>”</p>
 <p>Java中有两个代理方式，即静态代理和动态代理，但是实际上我们在做android开发的时候并没有刻意的去在意到底使用了哪种代理方式。比如我们在用工厂模式的时候就是在使用了一个简单的静态代理。</p>
@@ -509,14 +510,19 @@
 
 <p>然后就会找到ActivityManagerProxy<br>再往下看的话就能够看到AMS了，那么他们之间的关系大致是这样的</p>
 <blockquote>
-<p>ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)</p>
+<font color="#ff000">ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)<br></font>
+
 </blockquote>
 <p>那么实际上ActivityManager的操作流程是，通过ActivityManager去拿到ActivityManagerNative中的一个代理类，就是ActivityManagerProxy,然后这个代理类就会可以通过进程间通信拿到ActivityManagerService，然后再去做真正的任务。</p>
-<p>ok，let me show you the code:(伪代码)</p>
-<p>ActivityManager:</p>
-<p>public class ActivityManager{</p>
-<p>}</p>
-<p>现在咱们初步模仿ActivityManagerService进行处理，因为AMS在处理某些逻辑的时候，它是放到C语言中去处理的，所以我们拿ActivityManagerService的时候并不是很方便，这个时候我们可以通过一个AMS的代理去操作</p>
+<p>ok，let me show you the code:(简化后的伪代码，这是代码还套了几层）</p>
+<pre><code>ActivityManager:
+
+public class ActivityManager{
+  doProcessThings(){
+  ActivityManagerNative.getDefault().doProcessThings();
+    }    
+}
+</code></pre><p>现在咱们初步模仿ActivityManagerService进行处理，因为AMS在处理某些逻辑的时候，它是放到C语言中去处理的，所以我们拿ActivityManagerService的时候并不是很方便，这个时候我们可以通过一个AMS的代理去操作</p>
 
     
 
