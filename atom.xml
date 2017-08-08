@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-06T05:08:43.000Z</updated>
+  <updated>2017-08-08T04:36:14.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,46 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>“静态代理”</title>
+    <link href="http://yoursite.com/2017/08/08/%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/"/>
+    <id>http://yoursite.com/2017/08/08/静态代理/</id>
+    <published>2017-08-08T03:38:56.000Z</published>
+    <updated>2017-08-08T04:36:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近有准备面试的小伙伴问我JAVA中的代理是什么?<br>被这么突然被这么一问，感觉有点懵逼啊，于是赶紧对这点知识做个复习，在这做下记录。    </p>
+<p>“代理”这个名词我们都很熟悉，最常见的就是“火车票代售点”、“xxx化妆品代理”等等，那么代理的意思就是：我们可以不用真正的“<strong>主体</strong>”，就能够使用到“<strong>主体</strong>”里面的功能，访问到“<strong>主体</strong>”里面的某个属性。</p>
+<p>那么总结一句话：“<em>代理是为一个对象提供一个代理者，别人通过这个代理者能够完成对这个对象的访问。</em>”</p>
+<p>Java中有两个代理方式，即静态代理和动态代理，但是实际上我们在做android开发的时候并没有刻意的去在意到底使用了哪种代理方式。比如我们在用工厂模式的时候就是在使用了一个简单的静态代理。</p>
+<p>ok，我们现在联想一下ActivityManager的工作任务。</p>
+<blockquote>
+<p>ActivityManager.AppTask<br>  ActivityManager.MemoryInfo<br>  ActivityManager.ProcessErrorStateInfo<br>ActivityManager.RecentTaskInfo<br>ActivityManager.RunningAppProcessInfo<br>ActivityManager.RunningServiceInfo<br>ActivityManager.RunningTaskInfo<br>ActivityManager.TaskDescription</p>
+</blockquote>
+<p>但是这些工作任务并不是由ActvityManager本身完成的，我们细看源码的话，会发现真正处理这些任务的“<strong>角色</strong>”是        </p>
+<font color="#A52A2A" size="4">ActivityManagerNative.getDefault()</font>
+
+<p>然后就会找到ActivityManagerProxy<br>再往下看的话就能够看到AMS了，那么他们之间的关系大致是这样的</p>
+<blockquote>
+<p>ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)</p>
+</blockquote>
+<p>那么实际上ActivityManager的操作流程是，通过ActivityManager去拿到ActivityManagerNative中的一个代理类，就是ActivityManagerProxy,然后这个代理类就会可以通过进程间通信拿到ActivityManagerService，然后再去做真正的任务。</p>
+<p>ok，let me show you the code:(伪代码)</p>
+<p>ActivityManager:</p>
+<p>public class ActivityManager{</p>
+<p>}</p>
+<p>现在咱们初步模仿ActivityManagerService进行处理，因为AMS在处理某些逻辑的时候，它是放到C语言中去处理的，所以我们拿ActivityManagerService的时候并不是很方便，这个时候我们可以通过一个AMS的代理去操作</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近有准备面试的小伙伴问我JAVA中的代理是什么?&lt;br&gt;被这么突然被这么一问，感觉有点懵逼啊，于是赶紧对这点知识做个复习，在这做下记录。    &lt;/p&gt;
+&lt;p&gt;“代理”这个名词我们都很熟悉，最常见的就是“火车票代售点”、“xxx化妆品代理”等等，那么代理的意思就是：我们可
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>aboutme</title>
