@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-08T04:36:14.000Z</updated>
+  <updated>2017-08-08T04:40:42.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>“静态代理”</title>
+    <title>“代理”</title>
     <link href="http://yoursite.com/2017/08/08/%E4%BB%A3%E7%90%86/"/>
     <id>http://yoursite.com/2017/08/08/代理/</id>
     <published>2017-08-08T03:38:56.000Z</published>
-    <updated>2017-08-08T04:36:14.000Z</updated>
+    <updated>2017-08-08T04:40:42.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近有准备面试的小伙伴问我JAVA中的代理是什么?<br>被这么突然被这么一问，感觉有点懵逼啊，于是赶紧对这点知识做个复习，在这做下记录。    </p>
 <p>“代理”这个名词我们都很熟悉，最常见的就是“火车票代售点”、“xxx化妆品代理”等等，那么代理的意思就是：我们可以不用真正的“<strong>主体</strong>”，就能够使用到“<strong>主体</strong>”里面的功能，访问到“<strong>主体</strong>”里面的某个属性。</p>
