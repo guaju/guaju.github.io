@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-08T05:57:53.000Z</updated>
+  <updated>2017-08-08T09:11:53.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/08/08/%E4%BB%A3%E7%90%86/"/>
     <id>http://yoursite.com/2017/08/08/代理/</id>
     <published>2017-08-08T03:38:56.000Z</published>
-    <updated>2017-08-08T05:57:53.000Z</updated>
+    <updated>2017-08-08T09:11:53.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近有准备面试的小伙伴问我JAVA中的代理是什么?</p>
 <p>被这么突然被这么一问，感觉有点懵逼啊，于是赶紧对这点知识做个复习，在这做下记录。    </p>
@@ -36,8 +36,7 @@
 
 <p>然后就会找到ActivityManagerProxy<br>再往下看的话就能够看到AMS了，那么他们之间的关系大致是这样的</p>
 <blockquote>
-<font color="#ff000">ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)<br></font>
-
+<p>ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)</p>
 </blockquote>
 <p>那么实际上ActivityManager的操作流程是，通过ActivityManager去拿到ActivityManagerNative中的一个代理类，就是ActivityManagerProxy,然后这个代理类就会可以通过进程间通信拿到ActivityManagerService，然后再去做真正的任务。</p>
 <p>ok，let me show you the code:(简化后的伪代码，这是代码还套了几层）</p>

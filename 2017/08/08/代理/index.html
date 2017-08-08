@@ -110,7 +110,7 @@
             "@type": "ImageObject",
             "url": "/img/favicon.png"
         },
-        "description": "Hi, nice to meet you"
+        "description": "talk is cheap,let me show you the code"
     },
     "headline": "“代理”",
     "url": "http://yoursite.com/2017/08/08/代理/index.html",
@@ -510,8 +510,7 @@
 
 <p>然后就会找到ActivityManagerProxy<br>再往下看的话就能够看到AMS了，那么他们之间的关系大致是这样的</p>
 <blockquote>
-<font color="#ff000">ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)<br></font>
-
+<p>ActivityManagerProxy代理类是ActivityManagerNative的内部类；<br>ActivityManagerNative是个抽象类，真正发挥作用的是它的子类ActivityManagerService（系统Service组件)</p>
 </blockquote>
 <p>那么实际上ActivityManager的操作流程是，通过ActivityManager去拿到ActivityManagerNative中的一个代理类，就是ActivityManagerProxy,然后这个代理类就会可以通过进程间通信拿到ActivityManagerService，然后再去做真正的任务。</p>
 <p>ok，let me show you the code:(简化后的伪代码，这是代码还套了几层）</p>
