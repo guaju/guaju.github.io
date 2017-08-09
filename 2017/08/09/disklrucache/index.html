@@ -12,7 +12,7 @@
     
     <title>
         
-            disklrucache | 
+            DiskLruCache 完全解析 | 
         
         blackqwerty
     </title>
@@ -67,18 +67,18 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="disklrucache | blackqwerty">
+    <meta property="og:title" content="DiskLruCache 完全解析 | blackqwerty">
     <meta property="og:image" content="/img/favicon.png" />
     <meta property="og:description" content="guaju‘blog">
     
 
     
         <meta property="article:published_time" content="8月 09, 2017" />
-        <meta property="article:modified_time" content="8月 09, 2017" />
+        <meta property="article:modified_time" content="8月 10, 2017" />
     
 
     <!-- The Twitter Card protocol -->
-    <meta name="twitter:title" content="disklrucache | blackqwerty">
+    <meta name="twitter:title" content="DiskLruCache 完全解析 | blackqwerty">
     <meta name="twitter:description" content="guaju‘blog">
     <meta name="twitter:image" content="/img/favicon.png">
     <meta name="twitter:card" content="summary_large_image" />
@@ -112,10 +112,10 @@
         },
         "description": "talk is cheap,let me show you the code"
     },
-    "headline": "disklrucache",
+    "headline": "DiskLruCache 完全解析",
     "url": "http://yoursite.com/2017/08/09/disklrucache/index.html",
     "datePublished": "8月 09, 2017",
-    "dateModified": "8月 09, 2017",
+    "dateModified": "8月 10, 2017",
     "description": "guaju‘blog",
     "mainEntityOfPage": {
         "@type": "WebPage",
@@ -375,7 +375,7 @@
         
     
             <p class="article-headline-p">
-                disklrucache
+                DiskLruCache 完全解析
             </p>
         </div>
 
@@ -445,7 +445,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=disklrucache&url=http://yoursite.com/2017/08/09/disklrucache/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=DiskLruCache 完全解析&url=http://yoursite.com/2017/08/09/disklrucache/index.html&pic=&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -454,7 +454,7 @@
 
     <!-- Share Twitter -->
     
-        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=disklrucache&url=http://yoursite.com/2017/08/09/disklrucache/index.html&via=guaju" target="_blank">
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=DiskLruCache 完全解析&url=http://yoursite.com/2017/08/09/disklrucache/index.html&via=guaju" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Twitter
             </li>
@@ -496,68 +496,22 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>重新看了下郭霖的disklrucache,现在在这里做下记录</p>
-<p>disklrucache 是J神为解决实际开发项目时贡献的一个小框架，整个小框架仅仅有三个类：</p>
+        <p><img src="http://oucijhbtq.bkt.clouddn.com/bb.png?imageMogr2/auto-orient/thumbnail/884x/blur/1x0/quality/75|imageslim" alt="BLACKBERRY" title="BLACKBERRY"></p>
+<p>重新看了下郭霖的disklrucache,现在在这里做下记录</p>
+<p>disklrucache 是J神为解决实际开发项目中的本地缓存问题而贡献的一个小框架，整个小框架仅仅有三个类：</p>
 <blockquote>
 <p>DiskLruCache.java<br>StrictLineReader.java<br>Util.java    </p>
 </blockquote>
-<p>我们在使用的时候可能用的方法是（源自源码）：</p>
-<pre><code> /**
-   * Opens the cache in {@code directory}, creating a cache if none exists there.
-      *
-      * @param directory a writable directory
-     * @param valueCount the number of values per cache entry. Must be positive.
-      * @param maxSize the maximum number of bytes this cache should use to store
-      * @throws IOException if reading or writing the cache directory fails
-     */
-public static DiskLruCache open(File directory, int appVersion, int valueCount, long maxSize)
-  throws IOException {
-if (maxSize &lt;= 0) {
-  throw new IllegalArgumentException(&quot;maxSize &lt;= 0&quot;);
-}
-if (valueCount &lt;= 0) {
-  throw new IllegalArgumentException(&quot;valueCount &lt;= 0&quot;);
-}
-
-// If a bkp file exists, use it instead.
-File backupFile = new File(directory, JOURNAL_FILE_BACKUP);
-if (backupFile.exists()) {
-  File journalFile = new File(directory, JOURNAL_FILE);
-  // If journal file also exists just delete backup file.
-  if (journalFile.exists()) {
-    backupFile.delete();
-  } else {
-    renameTo(backupFile, journalFile, false);
-  }
-}
-
-// Prefer to pick up where we left off.
-DiskLruCache cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);
-if (cache.journalFile.exists()) {
-  try {
-    cache.readJournal();
-    cache.processJournal();
-    return cache;
-  } catch (IOException journalIsCorrupt) {
-    System.out
-        .println(&quot;DiskLruCache &quot;
-            + directory
-            + &quot; is corrupt: &quot;
-            + journalIsCorrupt.getMessage()
-            + &quot;, removing&quot;);
-    cache.delete();
-  }
-}
-
-// Create a new empty cache.
-directory.mkdirs();
-cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);
-cache.rebuildJournal();
-return cache;
-  }
-</code></pre><p>我们可以看到，DiskLruCache需要通过open的方法拿到实例对象（因为DiskLruCache本身已经被单例模式了）</p>
-<p>这个open方法里面大致做了</p>
-<font color="#F00">journal文件的创建</font>
+<p>我们在使用的时候的大致步骤是：</p>
+<p>1、先得到DiskLruCache这个对象</p>
+<p>2、操作这个对象，其中包括存，取，删等操作</p>
+<p>3、清理缓存</p>
+<p>下面依次介绍一下：</p>
+<font color="#f00" size="3">1、先得到DiskLruCache这个对象</font><br>(源自源码）：<br><br>     /<em>*
+       </em> Opens the cache in {@code directory}, creating a cache if none exists there.<br>          <em>
+          </em> @param directory a writable directory<br>         <em> @param valueCount the number of values per cache entry. Must be positive.
+          </em> @param maxSize the maximum number of bytes this cache should use to store<br>          <em> @throws IOException if reading or writing the cache directory fails
+         </em>/<br>    public static DiskLruCache open(File directory, int appVersion, int valueCount, long maxSize)<br>      throws IOException {<br>    if (maxSize &lt;= 0) {<br>      throw new IllegalArgumentException(“maxSize &lt;= 0”);<br>    }<br>    if (valueCount &lt;= 0) {<br>      throw new IllegalArgumentException(“valueCount &lt;= 0”);<br>    }<br><br>    // If a bkp file exists, use it instead.<br>    File backupFile = new File(directory, JOURNAL_FILE_BACKUP);<br>    if (backupFile.exists()) {<br>      File journalFile = new File(directory, JOURNAL_FILE);<br>      // If journal file also exists just delete backup file.<br>      if (journalFile.exists()) {<br>        backupFile.delete();<br>      } else {<br>        renameTo(backupFile, journalFile, false);<br>      }<br>    }<br><br>    // Prefer to pick up where we left off.<br>    DiskLruCache cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);<br>    if (cache.journalFile.exists()) {<br>      try {<br>        cache.readJournal();<br>        cache.processJournal();<br>        return cache;<br>      } catch (IOException journalIsCorrupt) {<br>        System.out<br>            .println(“DiskLruCache “<br>                + directory<br>                + “ is corrupt: “<br>                + journalIsCorrupt.getMessage()<br>                + “, removing”);<br>        cache.delete();<br>      }<br>    }<br><br>    // Create a new empty cache.<br>    directory.mkdirs();<br>    cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);<br>    cache.rebuildJournal();<br>    return cache;<br>      }<br>我们可以看到，DiskLruCache需要通过open的方法拿到实例对象（因为DiskLruCache本身已经被单例模式了）<br><br>这个open方法里面大致做了<br><br><font color="#F00">journal文件的创建</font>
 
 <font color="#F00">journal备份文件的创建</font>
 
@@ -574,12 +528,15 @@ return cache;
 <p>拿缓存目录的方法是：getExternalCacheDir()或者是getCacheDir()</p>
 <p>cache缓存目录结构是“<strong>/sdcard/Android/data/\<application package\="">/cache</application></strong>”<br>当然如果手机比较老，而且没有挂在sd卡的话，<br>只能拿到这样的目录了“<strong>/data/data/\<application package\="">/cache</application></strong>”</p>
 <hr>
+<font color="#f00" size="3">2、使用DiskLruCache这个对象进行本地缓存文件的存、取、删</font>
+
 <p>我们通过open(目录,app版本号,同名文件数量,缓存控件大小)拿到DiskLruCache之后，下面我们来看一下DiskLruCache的使用方法：</p>
 <pre><code>存：edit +commit
 取：get
 删：remove
 清缓存：delete
-</code></pre><p>使用方法其实很简单，其中需要注意的是，一般我们在存数据的时候，存的数据名称并不是数据本来的名称</p>
+</code></pre><p>1⃣️ 存</p>
+<p>使用方法其实很简单，其中需要注意的是，一般我们在存数据的时候，存的数据名称并不是数据本来的名称</p>
 <p>比如说网络加载的图片，我们一般是把这个图片的网址当做名称标记，把图片网址经过md5加密方式进行加密</p>
 <p>得到一串16进制数组成的String字符串当做文件的名字。</p>
 <p>这里提供一个md5工具类，网上随便一搜都能搜到</p>
@@ -671,11 +628,170 @@ private synchronized Editor edit(String key, long expectedSequenceNumber) throws
 </code></pre><p> 主要思路塑造了一个 “dirtyFile”的输出流，这个“dirtyFile”是一个准备好的“缓存文件”，后缀是.tmp（“作者提供了两个文件，一个是dirtyFile 一个是cleanFile，dirtyFile会被后期清理时及时清理掉，只有经过clean后的dirtyFile才能转化成为cleanFile”）<br> 拿到上方的OutputStream之后，我们把从网络下载下来的流写入即可存入到dirtyFile中去了。</p>
  <font color="#f00">注意：上方仅仅是进行了流的写入到了dirtyFile，然后以后想要用这个文件，需要进行commit,这样才能变成cleanFile,这些操作在调用完flush后，将会存到日志文件journal中去</font>
 
+<p> 2⃣️ 取</p>
+<p> 取出本地缓存的就比较简单了，下面是源码：</p>
+<pre><code> public synchronized Snapshot get(String key) throws IOException {
+checkNotClosed();
+validateKey(key);
+Entry entry = lruEntries.get(key);
+if (entry == null) {
+  return null;
+}
 
+if (!entry.readable) {
+  return null;
+}
 
+// Open all streams eagerly to guarantee that we see a single published
+// snapshot. If we opened streams lazily then the streams could come
+// from different edits.
+InputStream[] ins = new InputStream[valueCount];
+try {
+  for (int i = 0; i &lt; valueCount; i++) {
+    ins[i] = new FileInputStream(entry.getCleanFile(i));
+  }
+} catch (FileNotFoundException e) {
+  // A file must have been deleted manually!
+  for (int i = 0; i &lt; valueCount; i++) {
+    if (ins[i] != null) {
+      Util.closeQuietly(ins[i]);
+    } else {
+      break;
+    }
+  }
+  return null;
+}
 
+redundantOpCount++;
+journalWriter.append(READ + &apos; &apos; + key + &apos;\n&apos;);
+if (journalRebuildRequired()) {
+  executorService.submit(cleanupCallable);
+}
 
+return new Snapshot(key, entry.sequenceNumber, ins, entry.lengths);
+  }
+</code></pre><p>  那么里面的操作基本上有这么几点</p>
+<p>  1.检查本地缓存是否关闭，确保处于未关闭状态，这是通过journalWriter来判断的(<font color="#f00">文件的存取删都跟日志文件有关系</font>）</p>
+<p>  2.检验传入参数“key”的有效性，应为J神在设计的时候对存入的文件名有特殊的规定，必须是1到120个字符以内的，并且取值范围是0-9，a-Z,只能包括下划线和中划线，所以这对文件名做了限定。</p>
+<p>  3.下面就直接从LinkedHashMap中读取名称为key的Entry数据了(因为我们存的时候就存到了此linkedHashMap之中)</p>
+<p>  4.由于日志文件和读 取 删 文件都是相关的，所以在取文件的时候也要对journal进行记录</p>
+<p>  5.比较重要的一步“redundantOpCount++;”这句代码是对journal 中的日志记录进行计数，当达到一定的临界值的时候<br>  journal文件就会被重新创建。代码如下</p>
+<pre><code>  /**
+ * We only rebuild the journal when it will halve the size of the journal
+ * and eliminate at least 2000 ops.
+ */
+private boolean journalRebuildRequired() {
+  final int redundantOpCompactThreshold = 2000;
+  return redundantOpCount &gt;= redundantOpCompactThreshold //
+      &amp;&amp; redundantOpCount &gt;= lruEntries.size();
+}
+</code></pre><p>3⃣️ 删</p>
+<p>有时候我们需要对特定的文件进行删除，比如我们的splash页面可能会设置成可以变化的图片，这个时候就没有必要对这个图片网址进行缓存了，而我们又不能对某个图片加载框架进行单独的 “不缓存“的设定，所以只能进行这个缓存文件的删除了。</p>
+<p>删的操作比取还要简单</p>
+<pre><code>/**
+  * Drops the entry for {@code key} if it exists and can be removed. Entries
+  * actively being edited cannot be removed.
+  *
+  * @return true if an entry was removed.
+  */
+ public synchronized boolean remove(String key) throws IOException {
+   checkNotClosed();
+   validateKey(key);
+   Entry entry = lruEntries.get(key);
+   if (entry == null || entry.currentEditor != null) {
+     return false;
+   }
 
+   for (int i = 0; i &lt; valueCount; i++) {
+     File file = entry.getCleanFile(i);
+     if (file.exists() &amp;&amp; !file.delete()) {
+       throw new IOException(&quot;failed to delete &quot; + file);
+     }
+     size -= entry.lengths[i];
+     entry.lengths[i] = 0;
+   }
+
+   redundantOpCount++;
+   journalWriter.append(REMOVE + &apos; &apos; + key + &apos;\n&apos;);
+   lruEntries.remove(key);
+
+   if (journalRebuildRequired()) {
+     executorService.submit(cleanupCallable);
+   }
+
+   return true;
+ }
+</code></pre><p> 除了跟取有几个相似点之外，其他的就是对LinkedHashMap进行了remove的操作，并且对日志文件进行了新的添加</p>
+<p> 4⃣️ 其他的一些api的使用</p>
+<ol>
+<li>size()<br>这个方法会返回当前缓存路径下所有缓存数据的总字节数，以byte为单位，如果应用程序中需要在界面上显示当前缓存数据的总大小，就可以通过调用这个方法计算出来。</li>
+</ol>
+<p>J神的DiskLruCache中存在着size的long类型的变量，变量在linkedhashmap操作的过程中也在不停的加 减控件大小，所以当用户调用的时候，只需要把这个变量返回给用户即可：（<font color="#f00">注意:我们在初始化的时候已经设定了DiskLruCache的大小，所以J神在editer提交全部的时候对size和缓存大小做了比较，如果size较大，那么就会对Journal日志文件进行重置，对缓存文件即LinkedHashMap进行释放（释放规则是下方第二块代码）</font>）</p>
+<pre><code>/**
+   * Returns the number of bytes currently being used to store the values in
+   * this cache. This may be greater than the max size if a background
+   * deletion is pending.
+   */
+  public synchronized long size() {
+    return size;
+  }
+</code></pre><p>–<br>    private void trimToSize() throws IOException {<br>    while (size &gt; maxSize) {<br>      Map.Entry<string, entry=""> toEvict = lruEntries.entrySet().iterator().next();<br>      remove(toEvict.getKey());<br>    }<br>      }<br>  释放规则我们可以看懂：即释放了最先存入的那个文件，每次当缓存内存空间大于设定的空间时，就会释放最先存入的那个文件。</string,></p>
+<p>2.flush()<br>这个方法用于将内存中的操作记录同步到日志文件（也就是journal文件）当中。这个方法非常重要，因为DiskLruCache能够正常工作的前提就是要依赖于journal文件中的内容。其实此方法并不是每次写入缓存都要调用一次flush()方法的，频繁地调用并不会带来任何好处，只会额外增加同步journal文件的时间。比较标准的做法就是在Activity的onPause()方法中去调用一次flush()方法就可以了。</p>
+<pre><code>/** Force buffered operations to the filesystem. */
+  public synchronized void flush() throws IOException {
+    checkNotClosed();
+    trimToSize();
+    journalWriter.flush();
+  }
+</code></pre><p>3.close()<br>这个方法用于将DiskLruCache关闭掉，是和open()方法对应的一个方法。关闭掉了之后就不能再调用DiskLruCache中任何操作缓存数据的方法，通常只应该在Activity的onDestroy()方法中去调用close()方法。</p>
+<font color="red">这个时候用户既不能存也不能取，但是文件还存在本地</font>
+
+<pre><code>/** Closes this cache. Stored values will remain on the filesystem. */
+ public synchronized void close() throws IOException {
+   if (journalWriter == null) {
+     return; // Already closed.
+   }
+   for (Entry entry : new ArrayList&lt;Entry&gt;(lruEntries.values())) {
+     if (entry.currentEditor != null) {
+       entry.currentEditor.abort();
+     }
+   }
+   trimToSize();
+   journalWriter.close();
+   journalWriter = null;
+ }
+</code></pre><p>4.delete()<br>这个方法用于将所有的缓存数据全部删除，比如说软件中的那个手动清理缓存功能，其实只需要调用一下DiskLruCache的delete()方法就可以实现了。</p>
+<pre><code> /**
+   * Closes the cache and deletes all of its stored values. This will delete
+   * all files in the cache directory including files that weren&apos;t created by
+   * the cache.
+   */
+  public void delete() throws IOException {
+    close();
+    Util.deleteContents(directory);
+  }
+
+-------------------------------------------------------------------------------
+
+      /**
+   * Deletes the contents of {@code dir}. Throws an IOException if any file
+   * could not be deleted, or if {@code dir} is not a readable directory.
+   */
+  static void deleteContents(File dir) throws IOException {
+    File[] files = dir.listFiles();
+    if (files == null) {
+      throw new IOException(&quot;not a readable directory: &quot; + dir);
+    }
+    for (File file : files) {
+      if (file.isDirectory()) {
+        deleteContents(file);
+      }
+      if (!file.delete()) {
+        throw new IOException(&quot;failed to delete file: &quot; + file);
+      }
+    }
+  }
+</code></pre><p>J神的代码大致上就这样，值得注意的是，此类是实现自Closeable这个接口的，这个接口的实际用处不大，但是却强调了本类是一个可以关闭的数据源，调用这个接口的实现方法用于释放这个类中保存的数据源。</p>
 
     
 
