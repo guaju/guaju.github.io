@@ -570,7 +570,112 @@ return cache;
 <p>2.当前我们这个应用的版本号</p>
 <p>3.设置一个文件名对应的文件数量，一般传1就可以</p>
 <p>4.设置缓存文件的大小</p>
-<p>。。。待续</p>
+<p>需要注意的是，open的第一个参数，我们一般设置成为本机的缓存目录，现在我们的手机都已经内置内存卡了，不过我们还是可以进行一次判断，从而拿到手机中的cache缓存目录</p>
+<p>拿缓存目录的方法是：getExternalCacheDir()或者是getCacheDir()</p>
+<p>cache缓存目录结构是“<strong>/sdcard/Android/data/\<application package\="">/cache</application></strong>”<br>当然如果手机比较老，而且没有挂在sd卡的话，<br>只能拿到这样的目录了“<strong>/data/data/\<application package\="">/cache</application></strong>”</p>
+<hr>
+<p>我们通过open(目录,app版本号,同名文件数量,缓存控件大小)拿到DiskLruCache之后，下面我们来看一下DiskLruCache的使用方法：</p>
+<pre><code>存：edit +commit
+取：get
+删：remove
+清缓存：delete
+</code></pre><p>使用方法其实很简单，其中需要注意的是，一般我们在存数据的时候，存的数据名称并不是数据本来的名称</p>
+<p>比如说网络加载的图片，我们一般是把这个图片的网址当做名称标记，把图片网址经过md5加密方式进行加密</p>
+<p>得到一串16进制数组成的String字符串当做文件的名字。</p>
+<p>这里提供一个md5工具类，网上随便一搜都能搜到</p>
+<pre><code>    public String 2Md5(String key) {  
+    String cacheKey;  
+    try {  
+        final MessageDigest mDigest = MessageDigest.getInstance(&quot;MD5&quot;);  
+        mDigest.update(key.getBytes());  
+        cacheKey = bytesToHexString(mDigest.digest());  
+    } catch (NoSuchAlgorithmException e) {  
+        cacheKey = String.valueOf(key.hashCode());  
+    }  
+    return cacheKey;  
+}  
+
+private String bytesToHexString(byte[] bytes) {  
+    StringBuilder sb = new StringBuilder();  
+    for (int i = 0; i &lt; bytes.length; i++) {  
+        String hex = Integer.toHexString(0xFF &amp; bytes[i]);  
+        if (hex.length() == 1) {  
+            sb.append(&apos;0&apos;);  
+        }  
+        sb.append(hex);  
+    }  
+    return sb.toString();  
+}  
+</code></pre><p>所以说DiskLruCache的edit方法就是这么设计的：</p>
+<pre><code> public Editor edit(String key) throws IOException {
+  return edit(key, ANY_SEQUENCE_NUMBER);
+}
+
+private synchronized Editor edit(String key, long expectedSequenceNumber) throws         IOException {
+  checkNotClosed();
+  validateKey(key);
+  Entry entry = lruEntries.get(key);
+  if (expectedSequenceNumber != ANY_SEQUENCE_NUMBER &amp;&amp; (entry == null
+      || entry.sequenceNumber != expectedSequenceNumber)) {
+    return null; // Snapshot is stale.
+  }
+  if (entry == null) {
+    entry = new Entry(key);
+    lruEntries.put(key, entry);
+  } else if (entry.currentEditor != null) {
+    return null; // Another edit is in progress.
+  }
+
+  Editor editor = new Editor(entry);
+  entry.currentEditor = editor;
+
+  // Flush the journal before creating files to prevent file leaks.
+  journalWriter.write(DIRTY + &apos; &apos; + key + &apos;\n&apos;);
+  journalWriter.flush();
+  return editor;
+}
+</code></pre><p>edit方法调用了内部的同步方法 edit(key,-1) 思路是向以lruEntries为对象名的LinkedHashMap里面存入文件名称和Entry，那么Entry就是以后我们存入的流文件</p>
+<hr>
+<p>细心的同学应该已经注意到了，edit方法执行完后，就会返回一个Editor对象，因为我们的edit方法只能传入名称，所以往DiskLruCache里面存数据的重任就交给了Editor了</p>
+<p>往Editor里面存入数据的方法是：</p>
+<pre><code>public OutputStream newOutputStream(int index) throws IOException {
+  if (index &lt; 0 || index &gt;= valueCount) {
+    throw new IllegalArgumentException(&quot;Expected index &quot; + index + &quot; to &quot;
+            + &quot;be greater than 0 and less than the maximum value count &quot;
+            + &quot;of &quot; + valueCount);
+  }
+  synchronized (DiskLruCache.this) {
+    if (entry.currentEditor != this) {
+      throw new IllegalStateException();
+    }
+    if (!entry.readable) {
+      written[index] = true;
+    }
+    File dirtyFile = entry.getDirtyFile(index);
+    FileOutputStream outputStream;
+    try {
+      outputStream = new FileOutputStream(dirtyFile);
+    } catch (FileNotFoundException e) {
+      // Attempt to recreate the cache directory.
+      directory.mkdirs();
+      try {
+        outputStream = new FileOutputStream(dirtyFile);
+      } catch (FileNotFoundException e2) {
+        // We are unable to recover. Silently eat the writes.
+        return NULL_OUTPUT_STREAM;
+      }
+    }
+    return new FaultHidingOutputStream(outputStream);
+  }
+}
+</code></pre><p> 主要思路塑造了一个 “dirtyFile”的输出流，这个“dirtyFile”是一个准备好的“缓存文件”，后缀是.tmp（“作者提供了两个文件，一个是dirtyFile 一个是cleanFile，dirtyFile会被后期清理时及时清理掉，只有经过clean后的dirtyFile才能转化成为cleanFile”）<br> 拿到上方的OutputStream之后，我们把从网络下载下来的流写入即可存入到dirtyFile中去了。</p>
+ <font color="#f00">注意：上方仅仅是进行了流的写入到了dirtyFile，然后以后想要用这个文件，需要进行commit,这样才能变成cleanFile,这些操作在调用完flush后，将会存到日志文件journal中去</font>
+
+
+
+
+
+
 
     
 
