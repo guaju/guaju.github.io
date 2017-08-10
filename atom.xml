@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-10T01:25:54.000Z</updated>
+  <updated>2017-08-10T09:38:15.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>随笔</title>
+    <link href="http://yoursite.com/2017/08/10/%E9%9A%8F%E7%AC%94/"/>
+    <id>http://yoursite.com/2017/08/10/随笔/</id>
+    <published>2017-08-10T09:28:11.000Z</published>
+    <updated>2017-08-10T09:38:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在熟悉XX项目的源码，这里做下记录</p>
+<p>1.此方法能够将android版本大于等于19，也就是android4.4版本的话，就可以让当前使用了此方法的activity状态栏为毛玻璃透明状态</p>
+<pre><code>if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) {
+//透明状态栏
+getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+   }
+</code></pre><p>2.有的时候我们需要对本app进行 “新手指南”引导，其实这个东西的实现方式很简单，一般我们都采用UI给我们P的图进行展示，然后控制隐藏显示即可。你看到的以为是透明的图片，其实是美工切好的“假象”，开发有很多套路。。。<br>这里就不展示UI P的图片了，设计公司隐私。。。</p>
+<p>3.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在熟悉XX项目的源码，这里做下记录&lt;/p&gt;
+&lt;p&gt;1.此方法能够将android版本大于等于19，也就是android4.4版本的话，就可以让当前使用了此方法的activity状态栏为毛玻璃透明状态&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if (Build.VERSION.SD
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>DiskLruCache完全解析</title>
