@@ -503,7 +503,19 @@
 getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
    }
 </code></pre><p>2.有的时候我们需要对本app进行 “新手指南”引导，其实这个东西的实现方式很简单，一般我们都采用UI给我们P的图进行展示，然后控制隐藏显示即可。你看到的以为是透明的图片，其实是美工切好的“假象”，开发有很多套路。。。<br>这里就不展示UI P的图片了，设计公司隐私。。。</p>
-<p>3.</p>
+<p>3.提交git出现了错误：</p>
+<blockquote>
+<p>Failed to connect to 127.0.0.1 port 1080: Connection refused</p>
+</blockquote>
+<p>解决方法：terminal中输入</p>
+<blockquote>
+<p>open ~/.gitconfig</p>
+</blockquote>
+<p>然后删除里面的</p>
+<blockquote>
+<p>[http “<a href="https://github.com" target="_blank" rel="external">https://github.com</a>“]<br>proxy = socks5://127.0.0.1:1080 </p>
+</blockquote>
+<p>即可提交</p>
 
     
 
