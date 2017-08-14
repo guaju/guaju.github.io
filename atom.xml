@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-10T09:49:52.000Z</updated>
+  <updated>2017-08-14T16:15:51.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,71 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>picasso中一些好玩的东西</title>
+    <link href="http://yoursite.com/2017/08/12/picasso%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%8E%A9%E7%9A%84%E4%B8%9C%E8%A5%BF/"/>
+    <id>http://yoursite.com/2017/08/12/picasso中一些好玩的东西/</id>
+    <published>2017-08-11T16:52:30.000Z</published>
+    <updated>2017-08-14T16:15:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>这两天想查一查picasso的实现原理，当然是从picasso 提供的sample看起了，这一看不要紧，发现了点好玩的写法，现在记录一下：</p>
+<p>1.Collections的两个用法，意思是将Data.URLS这个数组全都装到前面的urls里面去，然后再讲url的顺序打乱，从而Ensure we get a different ordering of images on each run.即保证每次进来都是不一样的图片顺序</p>
+<pre><code>// Ensure we get a different ordering of images on each run.
+    Collections.addAll(urls, Data.URLS);
+    Collections.shuffle(urls);
+</code></pre><p>2.将这个集合扩大三倍，即自己又将自己存入了两份。<br>  这里的第一个初始化集合的方法比较独特，能够快速创建并且将自己的内容填充上。<br>    // Triple up the list.<br>        ArrayList<string> copy = new ArrayList&lt;&gt;(urls);<br>        urls.addAll(copy);<br>        urls.addAll(copy);    </string></p>
+<p>3.方形的图片，这个比较简单，就不多说了</p>
+<pre><code>    /** An image view which always remains square with respect to its width. */
+public final class SquaredImageView extends ImageView {
+  public SquaredImageView(Context context) {
+    super(context);
+  }
+
+  public SquaredImageView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+  }
+}  
+</code></pre><p>4.控制手指滑动gridview时图片的加载与否</p>
+<pre><code>    public class SampleScrollListener implements AbsListView.OnScrollListener {
+  private final Context context;
+
+  public SampleScrollListener(Context context) {
+    this.context = context;
+  }
+
+  @Override
+  public void onScrollStateChanged(AbsListView view, int scrollState) {
+    final Picasso picasso = Picasso.with();
+    if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+      picasso.resumeTag(context);
+    } else {
+      picasso.pauseTag(context);
+    }
+  }
+  @Override
+  public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                       int totalItemCount) {
+    // Do nothing.
+  }
+} 
+</code></pre><p>ok，现在我们就只分析其中一个比较简单的，有时间会对picasso 做一个针对性的刨析，比如picasso是用什么进行网络请求，picasso怎么压缩的图片，picasso有没有做缓存处理，具体怎么做的，稍后会一一记录，敬请期待。 </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这两天想查一查picasso的实现原理，当然是从picasso 提供的sample看起了，这一看不要紧，发现了点好玩的写法，现在记录一下：&lt;/p&gt;
+&lt;p&gt;1.Collections的两个用法，意思是将Data.URLS这个数组全都装到前面的urls里面去，然后再讲url的顺
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>随笔</title>
