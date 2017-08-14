@@ -12,7 +12,7 @@
     
     <title>
         
-            随笔 | 
+            picasso不完全解析 | 
         
         blackqwerty
     </title>
@@ -67,18 +67,18 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="随笔 | blackqwerty">
+    <meta property="og:title" content="picasso不完全解析 | blackqwerty">
     <meta property="og:image" content="/img/favicon.png" />
     <meta property="og:description" content="guaju‘blog">
     
 
     
-        <meta property="article:published_time" content="8月 10, 2017" />
-        <meta property="article:modified_time" content="8月 10, 2017" />
+        <meta property="article:published_time" content="8月 15, 2017" />
+        <meta property="article:modified_time" content="8月 15, 2017" />
     
 
     <!-- The Twitter Card protocol -->
-    <meta name="twitter:title" content="随笔 | blackqwerty">
+    <meta name="twitter:title" content="picasso不完全解析 | blackqwerty">
     <meta name="twitter:description" content="guaju‘blog">
     <meta name="twitter:image" content="/img/favicon.png">
     <meta name="twitter:card" content="summary_large_image" />
@@ -86,7 +86,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://yoursite.com/2017/08/10/随笔/index.html" />
+        <link rel="canonical" href="http://yoursite.com/2017/08/15/picasso不完全解析/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -112,10 +112,10 @@
         },
         "description": "talk is cheap,let me show you the code"
     },
-    "headline": "随笔",
-    "url": "http://yoursite.com/2017/08/10/随笔/index.html",
-    "datePublished": "8月 10, 2017",
-    "dateModified": "8月 10, 2017",
+    "headline": "picasso不完全解析",
+    "url": "http://yoursite.com/2017/08/15/picasso不完全解析/index.html",
+    "datePublished": "8月 15, 2017",
+    "dateModified": "8月 15, 2017",
     "description": "guaju‘blog",
     "mainEntityOfPage": {
         "@type": "WebPage",
@@ -375,7 +375,7 @@
         
     
             <p class="article-headline-p">
-                随笔
+                picasso不完全解析
             </p>
         </div>
 
@@ -394,7 +394,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>guaju</strong>
-        <span>8月 10, 2017</span>
+        <span>8月 15, 2017</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -445,7 +445,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=随笔&url=http://yoursite.com/2017/08/10/随笔/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=picasso不完全解析&url=http://yoursite.com/2017/08/15/picasso不完全解析/index.html&pic=&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -454,7 +454,7 @@
 
     <!-- Share Twitter -->
     
-        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=随笔&url=http://yoursite.com/2017/08/10/随笔/index.html&via=guaju" target="_blank">
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=picasso不完全解析&url=http://yoursite.com/2017/08/15/picasso不完全解析/index.html&via=guaju" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Twitter
             </li>
@@ -463,7 +463,7 @@
 
     <!-- Share Facebook -->
     
-        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/08/10/随笔/index.html" target="_blank">
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/08/15/picasso不完全解析/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Facebook
             </li>
@@ -472,7 +472,7 @@
 
     <!-- Share Google+ -->
     
-        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com/2017/08/10/随笔/index.html" target="_blank">
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com/2017/08/15/picasso不完全解析/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Google+
             </li>
@@ -496,26 +496,43 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>最近在熟悉XX项目的源码，这里做下记录</p>
-<p>1.此方法能够将android版本大于等于19，也就是android4.4版本的话，就可以让当前使用了此方法的activity状态栏为毛玻璃透明状态</p>
-<pre><code>if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) {
-//透明状态栏
-getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-   }
-</code></pre><p>2.有的时候我们需要对本app进行 “新手指南”引导，其实这个东西的实现方式很简单，一般我们都采用UI给我们P的图进行展示，然后控制隐藏显示即可。你看到的以为是透明的图片，其实是美工切好的“假象”，开发有很多套路。。。<br>这里就不展示UI P的图片了，设计公司隐私。。。</p>
-<p>3.提交git出现了错误：</p>
+        <p>如题，今天我要做的是对picasso进行不完全解析，切入点就那么几点：</p>
 <blockquote>
-<p>Failed to connect to 127.0.0.1 port 1080: Connection refused</p>
+<p>1.如何初始化<br>2.怎么做的联网请求<br>3.如何做的图片压缩<br>4.如何做的内存与本地缓存</p>
 </blockquote>
-<p>解决方法：terminal中输入</p>
-<blockquote>
-<p>open ~/.gitconfig</p>
-</blockquote>
-<p>然后删除里面的</p>
-<blockquote>
-<p>[http “<a href="https://github.com" target="_blank" rel="external">https://github.com</a>“]<br>proxy = socks5://127.0.0.1:1080 </p>
-</blockquote>
-<p>即可提交</p>
+<p>ok,但是时间有限，女友催我去睡觉，只能暂时写一个picasso的初始化操作了,😄。</p>
+<pre><code>   /**
+ * The global {@link Picasso} instance.
+ * &lt;p&gt;
+ * This instance is automatically initialized with defaults that are suitable to most
+ * implementations.
+ * &lt;ul&gt;
+ * &lt;li&gt;LRU memory cache of 15% the available application RAM&lt;/li&gt;
+ * &lt;li&gt;Disk cache of 2% storage space up to 50MB but no less than 5MB. (Note: this is only
+ * available on API 14+ &lt;em&gt;or&lt;/em&gt; if you are using a standalone library that provides a disk
+ * cache on all API levels like OkHttp)&lt;/li&gt;
+ * &lt;li&gt;Three download threads for disk and network access.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;
+ * If these settings do not meet the requirements of your application you can construct your own
+ * with full control over the configuration by using {@link Picasso.Builder} to create a
+ * {@link Picasso} instance. You can either use this directly or by setting it as the global
+ * instance with {@link #setSingletonInstance}.
+ */
+public static Picasso with() {
+  if (singleton == null) {
+    synchronized (Picasso.class) {
+      if (singleton == null) {
+        if (PicassoProvider.context == null) {
+          throw new IllegalStateException(&quot;context == null&quot;);
+        }
+        singleton = new Builder(PicassoProvider.context).build();
+      }
+    }
+  }
+  return singleton;
+}
+</code></pre><p>喏，这就是picasso 的初始化代码，请注意，下面的代码不重要，其中的注释很重要，英语好的同学应该一眼就看懂了，现在卖个关子，明天有时间进行更新。</p>
 
     
 
@@ -535,21 +552,13 @@ getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2017/08/12/picasso中一些好玩的东西/" id="post_nav-newer" class="prev-content">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_back</i>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            新篇
-        </a>
-    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
     
-        <a href="/2017/08/09/disklrucache/" id="post_nav-older" class="next-content">
+        <a href="/2017/08/12/picasso中一些好玩的东西/" id="post_nav-older" class="next-content">
             旧篇
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">

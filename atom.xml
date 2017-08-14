@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-14T16:15:51.000Z</updated>
+  <updated>2017-08-14T16:28:34.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,65 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>picasso不完全解析</title>
+    <link href="http://yoursite.com/2017/08/15/picasso%E4%B8%8D%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/"/>
+    <id>http://yoursite.com/2017/08/15/picasso不完全解析/</id>
+    <published>2017-08-14T16:20:15.000Z</published>
+    <updated>2017-08-14T16:28:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>如题，今天我要做的是对picasso进行不完全解析，切入点就那么几点：</p>
+<blockquote>
+<p>1.如何初始化<br>2.怎么做的联网请求<br>3.如何做的图片压缩<br>4.如何做的内存与本地缓存</p>
+</blockquote>
+<p>ok,但是时间有限，女友催我去睡觉，只能暂时写一个picasso的初始化操作了,😄。</p>
+<pre><code>   /**
+ * The global {@link Picasso} instance.
+ * &lt;p&gt;
+ * This instance is automatically initialized with defaults that are suitable to most
+ * implementations.
+ * &lt;ul&gt;
+ * &lt;li&gt;LRU memory cache of 15% the available application RAM&lt;/li&gt;
+ * &lt;li&gt;Disk cache of 2% storage space up to 50MB but no less than 5MB. (Note: this is only
+ * available on API 14+ &lt;em&gt;or&lt;/em&gt; if you are using a standalone library that provides a disk
+ * cache on all API levels like OkHttp)&lt;/li&gt;
+ * &lt;li&gt;Three download threads for disk and network access.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;
+ * If these settings do not meet the requirements of your application you can construct your own
+ * with full control over the configuration by using {@link Picasso.Builder} to create a
+ * {@link Picasso} instance. You can either use this directly or by setting it as the global
+ * instance with {@link #setSingletonInstance}.
+ */
+public static Picasso with() {
+  if (singleton == null) {
+    synchronized (Picasso.class) {
+      if (singleton == null) {
+        if (PicassoProvider.context == null) {
+          throw new IllegalStateException(&quot;context == null&quot;);
+        }
+        singleton = new Builder(PicassoProvider.context).build();
+      }
+    }
+  }
+  return singleton;
+}
+</code></pre><p>喏，这就是picasso 的初始化代码，请注意，下面的代码不重要，其中的注释很重要，英语好的同学应该一眼就看懂了，现在卖个关子，明天有时间进行更新。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;如题，今天我要做的是对picasso进行不完全解析，切入点就那么几点：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1.如何初始化&lt;br&gt;2.怎么做的联网请求&lt;br&gt;3.如何做的图片压缩&lt;br&gt;4.如何做的内存与本地缓存&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ok,但是时间
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>picasso中一些好玩的东西</title>
