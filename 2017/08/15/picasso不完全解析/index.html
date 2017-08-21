@@ -74,7 +74,7 @@
 
     
         <meta property="article:published_time" content="8月 15, 2017" />
-        <meta property="article:modified_time" content="8月 15, 2017" />
+        <meta property="article:modified_time" content="8月 21, 2017" />
     
 
     <!-- The Twitter Card protocol -->
@@ -115,7 +115,7 @@
     "headline": "picasso不完全解析",
     "url": "http://yoursite.com/2017/08/15/picasso不完全解析/index.html",
     "datePublished": "8月 15, 2017",
-    "dateModified": "8月 15, 2017",
+    "dateModified": "8月 21, 2017",
     "description": "guaju‘blog",
     "mainEntityOfPage": {
         "@type": "WebPage",
@@ -500,7 +500,6 @@
 <blockquote>
 <p>1.如何初始化<br>2.怎么做的联网请求<br>3.如何做的图片压缩<br>4.如何做的内存与本地缓存</p>
 </blockquote>
-<p>ok,但是时间有限，女友催我去睡觉，只能暂时写一个picasso的初始化操作了,😄。</p>
 <pre><code>   /**
  * The global {@link Picasso} instance.
  * &lt;p&gt;
@@ -532,7 +531,105 @@ public static Picasso with() {
   }
   return singleton;
 }
-</code></pre><p>喏，这就是picasso 的初始化代码，请注意，下面的代码不重要，其中的注释很重要，英语好的同学应该一眼就看懂了，现在卖个关子，明天有时间进行更新。</p>
+</code></pre><p>喏，这就是picasso 的初始化代码，请注意，下面的代码不重要，其中的注释很重要，英语好的同学应该一眼就看懂了.<br>现在我来解释一下：</p>
+<pre><code>picasso 的with方法，其实是picasso的初始化方法，他只是做了一些picasso 的基本设置，定制了一下picasso的配置参数，如果你对picasso有自己特殊的定义的话，可以通过picasso.Builder去做自己的自定义。
+那么picasso默认的定义是怎样的呢？
+1、指定了内存缓存的空间大小：为应用最大空间的15%，应用空间大概100多兆，那么给他内存分配的空间大概就是15~30兆左右了，这样其实能够满足一般的需求了。
+2、指定了本地缓存空间，注释是说是本地sd卡空间的2%，但是sd卡现在越做越大，从最小的16G到最大的256G，2%其实也是很大的，所以他又做了一个限制，即2m~50m之间，ok，这样挺好的，能够满足一般的应用了。
+</code></pre><p>我们可以通过Picasso.Builder()中的 memoryCache方法给Builder传入Cache对象就可以改变内存缓存的控制器，默认Picasso采用的是LruCache，即google官方推荐的内存算法机制</p>
+<hr>
+<p>memoryCache方法：</p>
+<pre><code>    /** Specify the memory cache used for the most recent images. */
+public Builder memoryCache(@NonNull Cache memoryCache) {
+  if (memoryCache == null) {
+    throw new IllegalArgumentException(&quot;Memory cache must not be null.&quot;);
+  }
+  if (this.cache != null) {
+    throw new IllegalStateException(&quot;Memory cache already set.&quot;);
+  }
+  this.cache = memoryCache;
+  return this;
+}
+</code></pre><p>默认传入的cache对象：</p>
+<pre><code>/** Create a cache using an appropriate portion of the available RAM as the maximum size. */
+      public LruCache(@NonNull Context context) {
+        this(Utils.calculateMemoryCacheSize(context));
+  }
+  -----------------------------------------------------------------------------------------
+      static int calculateMemoryCacheSize(Context context) {
+    ActivityManager am = getService(context, ACTIVITY_SERVICE);
+    boolean largeHeap = (context.getApplicationInfo().flags &amp; FLAG_LARGE_HEAP) != 0;
+    int memoryClass = largeHeap ? am.getLargeMemoryClass() : am.getMemoryClass();
+    // Target ~15% of the available heap.
+    return (int) (1024L * 1024L * memoryClass / 7);
+  }
+</code></pre><p>默认是对应用内存的1/7，算一下差不多是15%对吧，记住，确切的是1/7然后做的取整。</p>
+<hr>
+<p>再来看看单独设置的硬盘缓存大小：</p>
+<pre><code> /** Specify the {@link Downloader} that will be used for downloading images. */
+public Builder downloader(@NonNull Downloader downloader) {
+  if (downloader == null) {
+    throw new IllegalArgumentException(&quot;Downloader must not be null.&quot;);
+  }
+  if (this.downloader != null) {
+    throw new IllegalStateException(&quot;Downloader already set.&quot;);
+  }
+  this.downloader = downloader;
+  return this;
+}
+</code></pre><p>这里他要传的downloader是picasso自己定义的一个接口，但是他还提供了一个自己的downloader,即：OkHttp3Downloader<br>果然，大公司写框架都是一套一套的，都是用的自己的，对自己的代码绝对自信。不知道J神去了google，square公司会怎样。<br>接着,那么默认传入的downloader是谁呢？</p>
+<pre><code>     /**
+   * Create new downloader that uses OkHttp. This will install an image cache into your application
+   * cache directory.
+   */
+  public OkHttp3Downloader(final Context context) {
+    this(Utils.createDefaultCacheDir(context));
+  }
+
+  ---
+  static File createDefaultCacheDir(Context context) {
+File cache = new File(context.getApplicationContext().getCacheDir(), PICASSO_CACHE);
+if (!cache.exists()) {
+  //noinspection ResultOfMethodCallIgnored
+  cache.mkdirs();
+}
+return cache;
+  }
+  ---
+  private static final String PICASSO_CACHE = &quot;picasso-cache&quot;;
+</code></pre><p>但是，这个跟上文说的不一样呀，不是说指定的空间是sd卡的2%吗，现在怎么直接进入应用的空间了，应用的空间可是存储在ram当中的呀。。。。<br>对，没错，默认picasso就是这么设置的，如果不想这样的话，只能自己定义硬盘的存储目录了，当然，picasso也给我们定制好了</p>
+<pre><code>/**
+   * Create new downloader that uses OkHttp. This will install an image cache into the specified
+   * directory.
+   *
+   * @param cacheDir The directory in which the cache should be stored
+   */
+  public OkHttp3Downloader(final File cacheDir) {
+    this(cacheDir, Utils.calculateDiskCacheSize(cacheDir));
+  }
+</code></pre><p>你只需要传入一个目录就好了，里面的空间大小算法就是根据上边说的2%定义好的</p>
+<pre><code>   @TargetApi(JELLY_BEAN_MR2)
+static long calculateDiskCacheSize(File dir) {
+  long size = MIN_DISK_CACHE_SIZE;
+
+  try {
+    StatFs statFs = new StatFs(dir.getAbsolutePath());
+    //noinspection deprecation
+    long blockCount =
+        SDK_INT &lt; JELLY_BEAN_MR2 ? (long) statFs.getBlockCount() : statFs.getBlockCountLong();
+    //noinspection deprecation
+    long blockSize =
+        SDK_INT &lt; JELLY_BEAN_MR2 ? (long) statFs.getBlockSize() : statFs.getBlockSizeLong();
+    long available = blockCount * blockSize;
+    // Target 2% of the total space.
+    size = available / 50;
+  } catch (IllegalArgumentException ignored) {
+  }
+
+  // Bound inside min/max size for disk cache.
+  return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
+}
+</code></pre><p>ok,今天先到这，明天我们再来进行解析。</p>
 
     
 
@@ -551,6 +648,14 @@ public static Picasso with() {
             <!-- Post Prev & Next Nav -->
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
+    
+        <a href="/2017/08/16/泛型/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
     
 
     <!-- Section Spacer -->
@@ -650,7 +755,7 @@ public static Picasso with() {
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2017/08/">八月 2017<span class="sidebar_archives-count">7</span></a>
+                <a class="sidebar_archives-link" href="/archives/2017/08/">八月 2017<span class="sidebar_archives-count">8</span></a>
             </ul>
         </li>
         
