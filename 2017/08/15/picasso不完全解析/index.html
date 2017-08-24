@@ -74,7 +74,7 @@
 
     
         <meta property="article:published_time" content="8月 15, 2017" />
-        <meta property="article:modified_time" content="8月 21, 2017" />
+        <meta property="article:modified_time" content="8月 24, 2017" />
     
 
     <!-- The Twitter Card protocol -->
@@ -115,7 +115,7 @@
     "headline": "picasso不完全解析",
     "url": "http://yoursite.com/2017/08/15/picasso不完全解析/index.html",
     "datePublished": "8月 15, 2017",
-    "dateModified": "8月 21, 2017",
+    "dateModified": "8月 24, 2017",
     "description": "guaju‘blog",
     "mainEntityOfPage": {
         "@type": "WebPage",
@@ -337,7 +337,7 @@
 
     
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">1.</span> <span class="post-toc-text">那么，我们第一个研究题目是 picasso怎么做的缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">OK,Picasso的缓存基本上就是上面的部分了，默认picasso是为我们提供了缓存的，当然我们可以选择不用缓存，那么picasso也为我们提供了跳过缓存的方法：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">Picasso.with(getContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(image);</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">2.</span> <span class="post-toc-text">OK,说的也不少了，关于picasso缓存方面就到这里，下面我们来研究下，Picasso图片压缩的技术</span></a></li></ol>
         <!--
         <li class="mdl-menu__item">
             Some Action
@@ -496,7 +496,8 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>如题，今天我要做的是对picasso进行不完全解析，切入点就那么几点：</p>
+        <p><img src="http://img.blog.csdn.net/20151121153115617?imageMogr2/auto-orient/thumbnail/884x/blur/1x0/quality/75|imageslim&quot;picasso&quot;" alt="picasso"></p>
+<p>如题，今天我要做的是对picasso进行不完全解析，切入点就那么几点：</p>
 <blockquote>
 <p>1.如何初始化<br>2.怎么做的联网请求<br>3.如何做的图片压缩<br>4.如何做的内存与本地缓存</p>
 </blockquote>
@@ -538,6 +539,8 @@ public static Picasso with() {
 2、指定了本地缓存空间，注释是说是本地sd卡空间的2%，但是sd卡现在越做越大，从最小的16G到最大的256G，2%其实也是很大的，所以他又做了一个限制，即2m~50m之间，ok，这样挺好的，能够满足一般的应用了。
 </code></pre><p>我们可以通过Picasso.Builder()中的 memoryCache方法给Builder传入Cache对象就可以改变内存缓存的控制器，默认Picasso采用的是LruCache，即google官方推荐的内存算法机制</p>
 <hr>
+<h2>那么，我们第一个研究题目是 picasso怎么做的缓存</h2>
+
 <p>memoryCache方法：</p>
 <pre><code>    /** Specify the memory cache used for the most recent images. */
 public Builder memoryCache(@NonNull Cache memoryCache) {
@@ -629,7 +632,49 @@ static long calculateDiskCacheSize(File dir) {
   // Bound inside min/max size for disk cache.
   return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
 }
-</code></pre><p>ok,今天先到这，明天我们再来进行解析。</p>
+</code></pre><p></p><h3>OK,Picasso的缓存基本上就是上面的部分了，默认picasso是为我们提供了缓存的，当然我们可以选择不用缓存，那么picasso也为我们提供了跳过缓存的方法：</h3><br>我们都知道，picasso.with()方法返回的就是我们Picasso的实例对象，而picasso.with().load()方法实际上返回的是是一个requestCreator对象，而into()方法则将 request请求真正的创建出来。解决跳过缓存的逻辑就在RequestCreate中。<p></p>
+<pre><code>      /**
+ * Specifies the {@link MemoryPolicy} to use for this request. You may specify additional policy
+ * options using the varargs parameter.
+ */
+public RequestCreator memoryPolicy(@NonNull MemoryPolicy policy,
+    @NonNull MemoryPolicy... additional) {
+  if (policy == null) {
+    throw new IllegalArgumentException(&quot;Memory policy cannot be null.&quot;);
+  }
+  this.memoryPolicy |= policy.index;
+  if (additional == null) {
+    throw new IllegalArgumentException(&quot;Memory policy cannot be null.&quot;);
+  }
+  if (additional.length &gt; 0) {
+    for (MemoryPolicy memoryPolicy : additional) {
+      if (memoryPolicy == null) {
+        throw new IllegalArgumentException(&quot;Memory policy cannot be null.&quot;);
+      }
+      this.memoryPolicy |= memoryPolicy.index;
+    }
+  }
+  return this;
+}
+</code></pre><p>通过以上RequestCreator给我们提供的方法，我们就能够知道我们只需要在load()方法之后添加一个<font color="red">memoryPilicy()</font>方法即可。里面传入一个memory的策略就行了：<br>那么策略有两个</p>
+<blockquote>
+<p> /<strong> Skips memory cache lookup when processing a request. */<br> NO_CACHE(1 &lt;&lt; 0),<br> /</strong>  </p>
+<ul>
+<li>Skips storing the final result into memory cache. Useful for one-off requests  </li>
+<li>to avoid evicting other bitmaps from the cache.<br>*/<br>NO_STORE(1 &lt;&lt; 1);<br>那么，我们就这样使用好了 <h4>Picasso.with(getContext()).load(imageUrl).memoryPolicy(MemoryPolicy.NO_CACHE).into(image);</h4>
+
+</li>
+</ul>
+</blockquote>
+<h2>OK,说的也不少了，关于picasso缓存方面就到这里，下面我们来研究下，Picasso图片压缩的技术</h2>
+
+
+
+
+
+
+
+<p>致谢：<a href="http://blog.csdn.net/chdjj/article/details/49964901" target="_blank" rel="external">http://blog.csdn.net/chdjj/article/details/49964901</a></p>
 
     
 
