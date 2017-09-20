@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-16T06:24:16.000Z</updated>
+  <updated>2017-09-20T16:42:14.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,72 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>retrofit_uploads_pics</title>
+    <link href="http://yoursite.com/2017/09/21/retrofit-uploads-pics/"/>
+    <id>http://yoursite.com/2017/09/21/retrofit-uploads-pics/</id>
+    <published>2017-09-20T16:32:31.000Z</published>
+    <updated>2017-09-20T16:42:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>hello，好久不见了各位，最近因为公司内部员工调整，导致工作任务加重，再加上还有其他一些琐事，没有更新本网站，不过，小伙伴们现在我回来了，接下来会陆续提供一些好文给大家，今天记录的是retrofit上传图片的操作，其实很简单，我这儿就做一个记录，有用到的哥们直接复制代码就欧了。</p>
+<pre><code>/**
+ * 上传三张图片
+ * @param description
+ * @param imgs
+ * @param imgs1
+ * @param imgs3
+ * @return
+ */
+@Multipart
+@POST(&quot;/upload&quot;)
+Call&lt;String&gt; uploadImage(@Part(&quot;fileName&quot;) String description,
+                         @Part(&quot;file\&quot;; filename=\&quot;image.png\&quot;&quot;)RequestBody imgs,
+                         @Part(&quot;file\&quot;; filename=\&quot;image.png\&quot;&quot;)RequestBody imgs1,
+                         @Part(&quot;file\&quot;; filename=\&quot;image.png\&quot;&quot;)RequestBody imgs3);
+</code></pre><p> ok，大家也看到了，上传图片其实就是需要在注解前边加上另外一个@Multipart这样的关键字就可以了，其实跟OkHttp是一样的。</p>
+<p>  另外一点就是RequestBody怎么创建了，下面就是RequestBody的创建方法：</p>
+<pre><code>RequestBody requestBody1 =
+     RequestBody.create(MediaType.parse(&quot;multipart/form-data&quot;), file);
+</code></pre><p>requestbody的创建方法需要传入一个MediaType，这个MediaType必须是这样的：MediaType.parse(“mutipart/form-data”)这个类型的。</p>
+<p>ok，另外一个注意点当然还是那就话，如果你的服务器地址设定的是接受多类型的文件的，那么必须添加@Mutipart注解，如果接口知识简单类型的，那么你的写法就不用参照这个写法了。</p>
+<p>ok，这是今天的小记录，以后会给大家写一些c c++ 数据结构的知识，敬请期待~~~哈哈</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;hello，好久不见了各位，最近因为公司内部员工调整，导致工作任务加重，再加上还有其他一些琐事，没有更新本网站，不过，小伙伴们现在我回来了，接下来会陆续提供一些好文给大家，今天记录的是retrofit上传图片的操作，其实很简单，我这儿就做一个记录，有用到的哥们直接复制代码就
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>as_bug_汇总</title>
+    <link href="http://yoursite.com/2017/08/24/as-bug-%E6%B1%87%E6%80%BB/"/>
+    <id>http://yoursite.com/2017/08/24/as-bug-汇总/</id>
+    <published>2017-08-24T09:42:48.000Z</published>
+    <updated>2017-08-24T09:54:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.“Execution failed for task ‘:app:mergeDebugResources’<br>   module build.gradle    android下</p>
+<blockquote>
+<p>aaptOptions.cruncherEnabled = false<br> aaptOptions.useNewCruncher = false</p>
+</blockquote>
+<p> 当然前提是将.9.png图片放到drawable目录下，然后再用as自带的工具打开保存，再次构建即可</p>
+<p> 2.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1.“Execution failed for task ‘:app:mergeDebugResources’&lt;br&gt;   module build.gradle    android下&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;aaptOptions.cruncherEna
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>泛型</title>
