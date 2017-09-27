@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-20T16:42:14.000Z</updated>
+  <updated>2017-09-27T01:50:57.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mvc和mvp的区别</title>
+    <link href="http://yoursite.com/2017/09/27/mvc%E5%92%8Cmvp%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>http://yoursite.com/2017/09/27/mvc和mvp的区别/</id>
+    <published>2017-09-27T01:02:40.000Z</published>
+    <updated>2017-09-27T01:50:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<p></p><h1>MVC和MVP区别</h1><p></p>
+<h2><br>目前来说主流的开发模式都是mvp，但是还有程序员还有公司在坚持MVC,百度等一些大公司或者一些极客在用mvvm</h2>
+
+
+<p>MVC:</p>
+<p>model 模型，用来存放一些javabean和封装的业务逻辑等<br>view  视图，那么mvc中布局文件和activity、fragment等都有一些v的内容，只有布局才是纯粹的视图<br>controler 控制者（管理者） </p>
+<p>用来操作model并且更新view视图的，activity 和fragment也当做了controler,所以说activity 或者fragment他们处理的事务比较多，既处理视图的逻辑，还处理其他的逻辑比如：加载数据，定位，支付等等，这样的话会导致activity 或者fragment代码量略多。有经验的开发者会通过代码抽取减少activity和Fragment的代码量，但是即使这样抽取了，activity 或者fragment的业务逻辑还是比较多的，所以说有可能会报出一个这样的错：you have do much things on mainthread，类似这样的错误，同时存在一个隐患，由于activity 或者fragment的业务很复杂，势必会让声明或者定义的变量和方法过多，从而造成OOM,如果还多次使用静态修饰，还有可能会造成内存泄漏。</p>
+<p>MVP:完美的解决了mvc设计时的初衷，就是说隔离model view</p>
+<p>model：  模型  用来存放一些javabean和封装的业务逻辑等 </p>
+<p>view ：  视图  布局 ，除此之外，我们需要定义view接口来动态改变布局 ，view接口的实现类是activity、fragment,所以说这个时候activity 和fragment专门成了view </p>
+<p>presenter: 呈现者 是model view之间的沟通者，用来操作model更新view</p>
+<p>MVVM:</p>
+<p>model<br>view<br>modelview/viewmodel  有databinding框架支持你去做</p>
+<p>mvvm是google开发者推荐使用的一个开发模式，他们专门在android系统中定义了databinding框架，来实现view 和model之间的交互，所以说初学者会觉得有点蒙，因为它里面少点代码，这个以后再讲。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;/p&gt;&lt;h1&gt;MVC和MVP区别&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+&lt;h2&gt;&lt;br&gt;目前来说主流的开发模式都是mvp，但是还有程序员还有公司在坚持MVC,百度等一些大公司或者一些极客在用mvvm&lt;/h2&gt;
+
+
+&lt;p&gt;MVC:&lt;/p&gt;
+&lt;p&gt;model 模型，用来存放一些javabe
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>retrofit_uploads_pics</title>
@@ -49,6 +86,20 @@ Call&lt;String&gt; uploadImage(@Part(&quot;fileName&quot;) String description,
     <summary type="html">
     
       &lt;p&gt;hello，好久不见了各位，最近因为公司内部员工调整，导致工作任务加重，再加上还有其他一些琐事，没有更新本网站，不过，小伙伴们现在我回来了，接下来会陆续提供一些好文给大家，今天记录的是retrofit上传图片的操作，其实很简单，我这儿就做一个记录，有用到的哥们直接复制代码就
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>retrofit上传tupian</title>
+    <link href="http://yoursite.com/2017/09/21/retrofit%E4%B8%8A%E4%BC%A0tupian/"/>
+    <id>http://yoursite.com/2017/09/21/retrofit上传tupian/</id>
+    <published>2017-09-20T16:31:00.000Z</published>
+    <updated>2017-09-20T16:31:00.000Z</updated>
+    
+    <summary type="html">
     
     </summary>
     
