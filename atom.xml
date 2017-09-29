@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-27T01:50:57.000Z</updated>
+  <updated>2017-09-29T08:03:07.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,20 +16,124 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>js调用android本地方法</title>
+    <link href="http://yoursite.com/2017/09/29/js%E8%B0%83%E7%94%A8android%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95/"/>
+    <id>http://yoursite.com/2017/09/29/js调用android本地方法/</id>
+    <published>2017-09-29T06:50:32.000Z</published>
+    <updated>2017-09-29T08:03:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://oucijhbtq.bkt.clouddn.com/%E9%BE%99%E7%BA%B9%E8%BA%AB%E7%9A%84%E5%A5%B3%E5%AD%A9.jpg" alt="picasso"><br>昨天自己录了一个android本地调用h5中js方法，可能是因为视频比较耗费流量，结果看的人不是很多，所以决定还是先写文章，再录制一个同步的视频，这样大家就会方便很多了。</p>
+<p>好，今天给大家带来的是h5中调用android本地方法。其实很简单，只需要记住几个规则就可以了。</p>
+<p>接下来就直接上代码了</p>
+<blockquote>
+<p>html文件，非常简单，自己写一下就行</p>
+</blockquote>
+<p>file.html这个文件我放到了assets目录中了</p>
+<pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;button onclick=&quot;window.nihaoma.showToast()&quot;&gt;点击吐司&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><blockquote>
+<p>activity代码</p>
+</blockquote>
+<pre><code>    package com.guaju.webview2js;
+    import android.os.Bundle;
+    import android.support.v7.app.AppCompatActivity;
+    import android.webkit.JavascriptInterface;
+    import android.webkit.WebSettings;
+    import android.webkit.WebView;        
+    public class MainActivity extends AppCompatActivity {
+        private static final String TAG = &quot;MainActivity&quot;;
+        private WebView wv;
+        @JavascriptInterface
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            //初始化webview
+            wv = (WebView) findViewById(R.id.webView);
+            //获得设置
+            WebSettings settings = wv.getSettings();
+            //启用js
+            settings.setJavaScriptEnabled(true);
+            //拼装网址
+            String url=&quot;file:///android_asset/file.html&quot;;
+            //加载网址
+            wv.loadUrl(url);
+            //关键代码：添加js接口一共js调用，第一个参数是传递的包含方法的类的实例，第二个则是这个类的“代号”，这个代号需要在js中使用
+            wv.addJavascriptInterface(new ToastUtils(),&quot;nihaoma&quot;);
+        }
+
+}
+</code></pre><p>看注释就一目了然了，布局不再展示了哈，就一个webview    </p>
+<blockquote>
+<p>ToastUtils一个供js调用的类，里面有个打印吐司的方法</p>
+</blockquote>
+<pre><code>package com.guaju.webview2js;
+
+import android.webkit.JavascriptInterface;
+import android.widget.Toast;
+
+/**
+ * Created by guaju on 2017/9/29.
+ */
+
+public class ToastUtils {
+//注意一定要加上这句注解，否则调用不成功
+    @JavascriptInterface
+    public  void showToast(){
+        Toast.makeText(App.appContext, &quot;我爱你中国&quot;, Toast.LENGTH_SHORT).show();
+    }
+}
+</code></pre><blockquote>
+<p>app类，提供了上下文，记得在清单文件中声明name</p>
+</blockquote>
+<pre><code>package com.guaju.webview2js;
+import android.app.Application;
+import android.content.Context;
+
+/**
+ * Created by guaju on 2017/9/29.
+ */
+
+public class App extends Application {
+  public  static Context appContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        appContext=this;
+    }
+}
+</code></pre><p>ok，小伙伴们，是不是很简单，赶快来练习一下上手吧~~~</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://oucijhbtq.bkt.clouddn.com/%E9%BE%99%E7%BA%B9%E8%BA%AB%E7%9A%84%E5%A5%B3%E5%AD%A9.jpg&quot; alt=&quot;picasso&quot;&gt;&lt;br&gt;昨天自己录了一个android本
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>mvc和mvp的区别</title>
     <link href="http://yoursite.com/2017/09/27/mvc%E5%92%8Cmvp%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
     <id>http://yoursite.com/2017/09/27/mvc和mvp的区别/</id>
     <published>2017-09-27T01:02:40.000Z</published>
-    <updated>2017-09-27T01:50:57.000Z</updated>
+    <updated>2017-09-29T07:13:36.000Z</updated>
     
     <content type="html"><![CDATA[<p></p><h1>MVC和MVP区别</h1><p></p>
 <h2><br>目前来说主流的开发模式都是mvp，但是还有程序员还有公司在坚持MVC,百度等一些大公司或者一些极客在用mvvm</h2>
 
 
 <p>MVC:</p>
+<p><img src="http://oucijhbtq.bkt.clouddn.com/mvc.png" alt="mvc"></p>
 <p>model 模型，用来存放一些javabean和封装的业务逻辑等<br>view  视图，那么mvc中布局文件和activity、fragment等都有一些v的内容，只有布局才是纯粹的视图<br>controler 控制者（管理者） </p>
 <p>用来操作model并且更新view视图的，activity 和fragment也当做了controler,所以说activity 或者fragment他们处理的事务比较多，既处理视图的逻辑，还处理其他的逻辑比如：加载数据，定位，支付等等，这样的话会导致activity 或者fragment代码量略多。有经验的开发者会通过代码抽取减少activity和Fragment的代码量，但是即使这样抽取了，activity 或者fragment的业务逻辑还是比较多的，所以说有可能会报出一个这样的错：you have do much things on mainthread，类似这样的错误，同时存在一个隐患，由于activity 或者fragment的业务很复杂，势必会让声明或者定义的变量和方法过多，从而造成OOM,如果还多次使用静态修饰，还有可能会造成内存泄漏。</p>
-<p>MVP:完美的解决了mvc设计时的初衷，就是说隔离model view</p>
+<p>MVP:完美的解决了mvc设计时的初衷，就是说隔离model view<br><img src="http://oucijhbtq.bkt.clouddn.com/mvp.png" alt="mvp"></p>
 <p>model：  模型  用来存放一些javabean和封装的业务逻辑等 </p>
 <p>view ：  视图  布局 ，除此之外，我们需要定义view接口来动态改变布局 ，view接口的实现类是activity、fragment,所以说这个时候activity 和fragment专门成了view </p>
 <p>presenter: 呈现者 是model view之间的沟通者，用来操作model更新view</p>
@@ -45,7 +149,7 @@
 
 
 &lt;p&gt;MVC:&lt;/p&gt;
-&lt;p&gt;model 模型，用来存放一些javabe
+&lt;p&gt;&lt;img src=&quot;http://ouci
     
     </summary>
     
