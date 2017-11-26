@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-29T08:03:07.000Z</updated>
+  <updated>2017-11-26T15:45:16.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2017_11_26随笔</title>
+    <link href="http://yoursite.com/2017/11/26/2017-11-26%E9%9A%8F%E7%AC%94/"/>
+    <id>http://yoursite.com/2017/11/26/2017-11-26随笔/</id>
+    <published>2017-11-26T15:10:13.000Z</published>
+    <updated>2017-11-26T15:45:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近周围有很多烦心事，这两天又出现了rgb事件，感觉心烦气躁。</p>
+<p>究其根本原因，还是想法太多，什么都想去兼顾，但是最终因为很多想做的事情没有做好，导致出现了一些这样那样的问题。</p>
+<p>只有在夜深人静的时候自己才能有点心思去思考，并且去决定一些事情。</p>
+<p>first of all，家人的身体包括自己的身体是第一位的，所以不管有多么重要的事情，一定不要忘记了这条准则，其他的事情都靠边，先把家里的事情顾好才是解决所有事情的核心。当然凡事都是有技巧的，如果一味的去自己身体力行的去做的话，可能自己就做不了其他的事了。    </p>
+<p>the second one,定一个小目标，目标不贪多，但是一定是近期你最想做，而且有能力完成的目标。前一段时间我做了一些蠢事，我定了三个目标，并且期望着能够同时将这三个事情做好，结果是一个目标都没有完成，每个目标都只做了一部分，没有达到我最终的目的。这个教训其实是最深刻的，我白白浪费了两个月的时间，今后的工作或者生活一定要把握好。</p>
+<p>the third one,执行，一定要去执行，并且彻底的执行，才能将事情达到最好，就像学习，当学习的时候如果浅尝辄止，那么过了一段时间之后再去回想的话，感觉一点印象都没有了，而经过深入学习的成果就比较好，所以以后的学习一定要深入，不要浅尝辄止，更不能去死记硬背。当然为了某些一次性搞定的东西可以去背一下。</p>
+<p>the fourth one,合理安排时间吧！        </p>
+<p>先写到这里，时间不早了，明天还有计划，先到这了，仅作为一次记录，如果有朋友看到了也不要吐槽，这个网址初衷仅仅是当做我的生活、学习记录使用的。</p>
+<p>祝自己一些安好，一切顺利，祝各位读者心想事成</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近周围有很多烦心事，这两天又出现了rgb事件，感觉心烦气躁。&lt;/p&gt;
+&lt;p&gt;究其根本原因，还是想法太多，什么都想去兼顾，但是最终因为很多想做的事情没有做好，导致出现了一些这样那样的问题。&lt;/p&gt;
+&lt;p&gt;只有在夜深人静的时候自己才能有点心思去思考，并且去决定一些事情。&lt;/p
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>浅谈google提供的设计模式mvvm</title>
+    <link href="http://yoursite.com/2017/10/08/%E6%B5%85%E8%B0%88google%E6%8F%90%E4%BE%9B%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8Fmvvm/"/>
+    <id>http://yoursite.com/2017/10/08/浅谈google提供的设计模式mvvm/</id>
+    <published>2017-10-08T06:23:52.000Z</published>
+    <updated>2017-10-08T06:23:52.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>js调用android本地方法</title>
