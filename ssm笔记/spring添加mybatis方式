@@ -1,0 +1,72 @@
+1、整合mybatis的时候，多添加了两个坐标
+
+   <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.3.23</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+2、spring配置 
+
+public class JdbcConfig {
+    @Value("${jdbc.driver}")
+    private String driver;
+    @Value("${jdbc.url}")
+    private String url;
+    @Value("${jdbc.username}")
+    private String username;
+    @Value("${jdbc.password}")
+    private String password;
+
+    @Bean
+    public DataSource dataSource(){
+        DruidDataSource ds=new DruidDataSource();
+        ds.setDriverClassName(driver);
+        ds.setUrl(url);
+        ds.setUsername(username);
+        ds.setPassword(password);
+        return ds;
+    }
+}
+
+
+
+
+
+public class MyBatisConfig {
+    @Bean
+    public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource) {
+        SqlSessionFactoryBean ssfb = new SqlSessionFactoryBean();
+        ssfb.setTypeAliasesPackage("com.guaju.domain");
+        ssfb.setDataSource(dataSource);
+        return ssfb;
+    }
+
+    @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer(){
+        MapperScannerConfigurer msc = new MapperScannerConfigurer();
+        msc.setBasePackage("com.guaju.dao");
+        return msc;
+    }
+
+
+}
+
+
+
+@Configuration
+@ComponentScan("com.guaju")
+@PropertySource("classpath:jdbc.properties")
+@Import({JdbcConfig.class,MyBatisConfig.class})
+public class SpringConfig {
+
+}
+
+
+其实就是把 mybatis 原来的配置文件，通过SqlSessionFactoryBean、MapperScanConfigurer 注入的方式 完成替换
